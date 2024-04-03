@@ -5,6 +5,7 @@ import json
 from urllib.parse import quote_plus
 import os
 from bson import json_util
+from flask_cors import CORS, cross_origin
 
 
 # Set OpenAI key
@@ -14,7 +15,7 @@ MONGODB_CONNECTION_URI: str = "mongodb+srv://{}:{}@cluster0.6skdttz.mongodb.net/
 
 # Create Flask app
 app = Flask(__name__)
-
+CORS(app)
 
 # Set up our API route, using POST HTTP requests
 @app.route('/api/getPlaces', methods=["GET"])
@@ -24,7 +25,7 @@ def getPlaces():
     input_string = request.args.get("input")
 
     # If no input return "Invalid" with status 400
-    if (input_string == None):
+    if (input_string == None or len(input_string)==0):
         return "Invalid", 400
 
     # Generate an openai embedding from the user input
